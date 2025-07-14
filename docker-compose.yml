@@ -1,22 +1,77 @@
-version: '3.8'
-
 services:
-  harbor:
-    image: goharbor/harbor-all:v2.12.0
-    container_name: harbor
+  harbor-log:
+    image: goharbor/harbor-log:v2.10.0
+    container_name: harbor-log
     restart: always
     volumes:
-      - harbor_data:/data
+      - ./log:/var/log/harbor
+    networks:
+      - bridge
+
+  harbor-core:
+    image: goharbor/harbor-core:v2.10.0
+    container_name: harbor-core
+    restart: always
+    depends_on:
+      - harbor-log
+      - harbor-db
+      - redis
+    volumes:
       - ./harbor.yml:/etc/harbor/harbor.yml
-    ports:
-      - "8080:80"
+    networks:
+      - bridge
+
+  harbor-portal:
+    image: goharbor/harbor-portal:v2.10.0
+    container_name: harbor-portal
+    restart: always
+    depends_on:
+      - harbor-core
+    networks:
+      - bridge
+
+  harbor-jobservice:
+    image: goharbor/harbor-jobservice:v2.10.0
+    container_name: harbor-jobservice
+    restart: always
+    depends_on:
+      - harbor-core
+      - redis
+    networks:
+      - bridge
+
+  registry:
+    image: goharbor/registry-photon:v2.10.0
+    container_name: registry
+    restart: always
+    depends_on:
+      - harbor-log
+    volumes:
+      - harbor_data:/var/lib/registry
+    networks:
+      - bridge
+
+  harbor-db:
+    image: goharbor/harbor-db:v2.10.0
+    container_name: harbor-db
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
     environment:
-      - HARBOR_ADMIN_PASSWORD=admin123
+      - POSTGRES_PASSWORD=root123
+    networks:
+      - bridge
+
+  redis:
+    image: goharbor/redis-photon:v2.10.0
+    container_name: redis
+    restart: always
     networks:
       - bridge
 
 volumes:
   harbor_data:
+  db_data:
 
 networks:
   bridge:
