@@ -66,12 +66,15 @@ services:
     image: goharbor/redis-photon:v2.11.0
     container_name: redis
     restart: always
+    volumes:
+      - redis_data:/var/run
     networks:
       - harbor-network
 
 volumes:
   harbor_data:
   db_data:
+  redis_data:
 
 networks:
   harbor-network:
