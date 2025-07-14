@@ -1,39 +1,14 @@
-hostname: harbor.tichluyvang.com
+hostname: harbor.tichluyvang.com  # Thay bằng domain của bạn
 http:
-  port: 8080
+  port: 80
 
-https:
-  port: 8443
-  certificate: /your/cert/path  # Không cần thiết vì bạn dùng Nginx bên ngoài
-  private_key: /your/key/path   # Không cần thiết
-
-external_url: http://harbor.tichluyvang.com:8080
-
-harbor_admin_password: Harbor12345
-
+harbor_admin_password: admin123
 database:
   password: root123
-
-data_volume: /data/harbor
-
-trivy:
-  ignore_unfixed: false
-  skip_update: false
-  insecure: false
-
-jobservice:
-  max_job_workers: 10
-
+data_volume: /data
 log:
   level: info
-  rotate_count: 50
-  rotate_size: 200M
-  location: /var/log/docker
-
-notification:
-  webhook_job_max_retry: 3
-
-chart:
-  absolute_url: disabled
-
-_version: 2.8.4
+  local:
+    rotate_count: 50
+    rotate_size: 200M
+    location: /var/log/harbor
