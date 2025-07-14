@@ -85,7 +85,7 @@ services:
       - harbor
 
   trivy:
-    image: goharbor/harbor-scanner-trivy:v2.10.0
+    image: goharbor/harbor-scanner-trivy:v2.8.4
     container_name: trivy
     restart: always
     depends_on:
