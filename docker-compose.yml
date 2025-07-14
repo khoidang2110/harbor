@@ -1,6 +1,6 @@
 services:
   harbor-log:
-    image: goharbor/harbor-log:v2.10.0
+    image: goharbor/harbor-log:v2.11.0
     container_name: harbor-log
     restart: always
     volumes:
@@ -9,7 +9,7 @@ services:
       - bridge
 
   harbor-core:
-    image: goharbor/harbor-core:v2.10.0
+    image: goharbor/harbor-core:v2.11.0
     container_name: harbor-core
     restart: always
     depends_on:
@@ -22,7 +22,7 @@ services:
       - bridge
 
   harbor-portal:
-    image: goharbor/harbor-portal:v2.10.0
+    image: goharbor/harbor-portal:v2.11.0
     container_name: harbor-portal
     restart: always
     depends_on:
@@ -31,7 +31,7 @@ services:
       - bridge
 
   harbor-jobservice:
-    image: goharbor/harbor-jobservice:v2.10.0
+    image: goharbor/harbor-jobservice:v2.11.0
     container_name: harbor-jobservice
     restart: always
     depends_on:
@@ -41,7 +41,7 @@ services:
       - bridge
 
   registry:
-    image: goharbor/registry-photon:v2.10.0
+    image: goharbor/registry-photon:v2.11.0
     container_name: registry
     restart: always
     depends_on:
@@ -52,7 +52,7 @@ services:
       - bridge
 
   harbor-db:
-    image: goharbor/harbor-db:v2.10.0
+    image: goharbor/harbor-db:v2.11.0
     container_name: harbor-db
     restart: always
     volumes:
@@ -63,7 +63,7 @@ services:
       - bridge
 
   redis:
-    image: goharbor/redis-photon:v2.10.0
+    image: goharbor/redis-photon:v2.11.0
     container_name: redis
     restart: always
     networks:
