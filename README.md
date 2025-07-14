@@ -57,6 +57,7 @@ sudo ./install.sh
 Sau khi cài thành công, Harbor sẽ chạy tại http://your-vps-ip:8080
 ```
 ✅ BƯỚC 6: Cấu hình Nginx Proxy Manager (NPM)
+```bash
 Vào NPM và tạo 1 Proxy Host:
 
 Trường	Giá trị
@@ -65,7 +66,7 @@ Forward Hostname/IP	127.0.0.1 hoặc địa chỉ IP VPS
 Forward Port	8080
 Scheme	http
 SSL	Bật “Force SSL” + “HTTP/2” + chọn “Request a new SSL Certificate” với Let’s Encrypt
-
+```
 ✅ BƯỚC 7: Truy cập Harbor qua domain
 Mở trình duyệt và vào:
 👉 https://harbor.tichluyvang.com
