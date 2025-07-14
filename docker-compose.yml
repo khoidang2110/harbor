@@ -1,103 +1,23 @@
-version: '3.5'
+version: '3.8'
 
 services:
-  log:
-    image: goharbor/harbor-log:v2.10.0
-    container_name: harbor-log
+  harbor:
+    image: goharbor/harbor-all:v2.12.0
+    container_name: harbor
     restart: always
     volumes:
-      - /data/harbor/log:/var/log/docker
-    networks:
-      - harbor
+      - harbor_data:/data
+      - ./harbor.yml:/etc/harbor/harbor.yml
     ports:
-      - 127.0.0.1:1514:10514  # Local syslog only
+      - "8080:80"
     environment:
-      - LOG_LEVEL=info
-      - LOG_ROTATION_COUNT=50
-      - LOG_ROTATION_SIZE=200M
-
-  registry:
-    image: goharbor/registry-photon:v2.10.0
-    container_name: registry
-    restart: always
-    volumes:
-      - /data/harbor/registry:/storage
-      - ./common/config/registry/:/etc/registry/
-    environment:
-      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/storage
+      - HARBOR_ADMIN_PASSWORD=admin123
     networks:
-      - harbor
+      - bridge
 
-  core:
-    image: goharbor/harbor-core:v2.10.0
-    container_name: harbor-core
-    depends_on:
-      - registry
-      - database
-      - redis
-    restart: always
-    volumes:
-      - /data/harbor/ca_download/:/etc/core/ca/
-      - /data/harbor/psc/:/etc/core/token/
-    environment:
-      - CORE_SECRET=your_core_secret
-      - JOBSERVICE_SECRET=your_jobservice_secret
-      - REGISTRY_CONTROLLER_URL=http://registry:5000
-    networks:
-      - harbor
-
-  portal:
-    image: goharbor/harbor-portal:v2.10.0
-    container_name: harbor-portal
-    restart: always
-    networks:
-      - harbor
-
-  jobservice:
-    image: goharbor/harbor-jobservice:v2.10.0
-    container_name: harbor-jobservice
-    depends_on:
-      - core
-    restart: always
-    volumes:
-      - /data/harbor/job_logs:/var/log/jobs
-    environment:
-      - JOBSERVICE_SECRET=your_jobservice_secret
-    networks:
-      - harbor
-
-  redis:
-    image: goharbor/redis-photon:v2.10.0
-    container_name: redis
-    restart: always
-    networks:
-      - harbor
-
-  database:
-    image: goharbor/harbor-db:v2.10.0
-    container_name: harbor-db
-    restart: always
-    volumes:
-      - /data/harbor/database:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=your_db_password
-    networks:
-      - harbor
-
-  trivy:
-    image: goharbor/harbor-scanner-trivy:v2.8.4
-    container_name: trivy
-    restart: always
-    depends_on:
-      - core
-    environment:
-      - SCANNER_LOG_LEVEL=info
-      - SCANNER_TRIVY_CACHE_DIR=/home/scanner/.cache
-    volumes:
-      - /data/harbor/trivy:/home/scanner/.cache
-    networks:
-      - harbor
+volumes:
+  harbor_data:
 
 networks:
-  harbor:
-    driver: bridge
+  bridge:
+    external: true
