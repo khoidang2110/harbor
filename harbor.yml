@@ -1,4 +1,4 @@
-hostname: harbor.tichluyvang.com  # Thay bằng domain của bạn
+hostname: harbor.tichluyvang.com
 http:
   port: 80
 
@@ -12,3 +12,9 @@ log:
     rotate_count: 50
     rotate_size: 200M
     location: /var/log/harbor
+cache:
+  kind: redis
+  settings:
+    addr: redis:6379
+    password: ""
+    db: 0
